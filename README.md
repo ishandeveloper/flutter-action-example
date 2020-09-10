@@ -1,16 +1,67 @@
-# github_actions_example
+<center>
+<img src="./assets/hero.png"><br>
+<h3> Flutter APK Generator Action</h3>
+<hr>
+</center>
 
-A new Flutter project.
+This repository is dedicated to a GitHub Action for generating a new apk and pushing it to the repository, whenever changes are made in master branch.
 
-## Getting Started
+With ease:
 
-This project is a starting point for a Flutter application.
+  - Generate new release apk's whenever changes are pushed
+  - distribute and test your apps quickly among all collaborators
+  - keep a track of every apk release version.
 
-A few resources to get you started if this is your first Flutter project:
+<pre>
+THIS REPOSITORY WAS CREATED AS A PART OF ACTIONS HACKATHON HOSTED BY DEV.TO AND GITHUB,
+</pre>
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Usage
+Example Workflow file
+
+An example workflow to set up your flutter apk generator action quickly.
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setting up Flutter SDK
+        uses: subosito/flutter-action@v1
+        with:
+          channel: stable
+
+      - name: Fetch Packages
+        run: flutter pub get
+      #     - run: flutter test
+      - name: Build APK
+        run: flutter build apk
+
+      - name: Copy APK To Parent Directory
+        run: cp ./build/app/outputs/flutter-apk/app-release.apk ./app.apk
+
+      - name: Commit APK
+        run: git add ./app.apk
+
+      - name: Configure Github
+        run: |
+          git config --local user.email "you@email.com"
+          git config --local user.name "yourusername"
+          git commit -m "Generated APK" -a
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+```
+
+## Learn More
+
+You can learn more about Github actions and Flutter [here](https://docs.github.com/en/actions) and [here](https://flutter.dev/docs) respectively.
+
+##### Made with ♥ by <a href="https://github.com/ishandeveloper">ishandeveloper</a>
+
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/ishandeveloper)
