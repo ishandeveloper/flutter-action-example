@@ -2,19 +2,33 @@ name: APK Generator
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Setting up Flutter SDK
-      uses: subosito/flutter-action@v1
-      with:
-        channel: stable
-    - run: flutter pub get
-#     - run: flutter test
-    - run: flutter build apk
+      - uses: actions/checkout@v1
+      - name: Setting up Flutter SDK
+        uses: subosito/flutter-action@v1
+        with:
+          channel: stable
+      - run: flutter pub get
+      #     - run: flutter test
+      - run: flutter build apk
+
+      - name: Copy APK To Parent Directory
+        run: cp ./build/app/outputs/flutter-apk/app-release.apk ./app.apk
+
+      - name: Commit files
+        run: |
+          git config --local user.email "contact@ishandeveloper.com"
+          git config --local user.name "ishandeveloper"
+          git commit -m "Generated APK" -a
+          
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
