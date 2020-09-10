@@ -3,8 +3,6 @@ name: APK Generator
 on:
   push:
     branches: [master]
-  pull_request:
-    branches: [master]
 
 jobs:
   build:
@@ -15,7 +13,7 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           channel: stable
-          
+
       - name: Fetch Packages
         run: flutter pub get
       #     - run: flutter test
