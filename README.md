@@ -35,7 +35,7 @@ jobs:
 
       - name: Fetch Packages
         run: flutter pub get
-      #     - run: flutter test
+
       - name: Build APK
         run: flutter build apk
 
